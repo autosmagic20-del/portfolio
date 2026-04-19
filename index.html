@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>יהודית כהן – מומחית אוטומציה עסקית</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+  /* ─────────────────────────── TOKENS ─────────────────────────── */
+  :root {
+    --bg:      #04040f;
+    --bg2:     #07071c;
+    --bg3:     #0b0b28;
+    --card:    #07071c;
+
+    --purple:  #a855f7;
+    --blue:    #3b82f6;
+    --cyan:    #22d3ee;
+    --green:   #22c55e;
+
+    --grad:         linear-gradient(135deg, #a855f7, #3b82f6, #22d3ee);
+    --grad-text:    linear-gradient(120deg, #e0aaff 0%, #818cf8 40%, #67e8f9 100%);
+    --grad-purple:  linear-gradient(135deg, #a855f7, #6d28d9);
+    --grad-green:   linear-gradient(135deg, #22c55e, #059669);
+
+    --text:    #f0f2ff;
+    --text-2:  #8892b0;
+    --text-3:  #4a5175;
+    --border:  rgba(255,255,255,0.06);
+
+    --r: 13px;
+    --transition: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    direction: rtl;
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─────────────────────── HERO ENTRANCE ANIMATIONS ─────────────── */
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(28px); filter: blur(10px); }
+    to   { opacity: 1; transform: translateY(0);    filter: blur(0);    }
+  }
+  @keyframes heroFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes blobPulse {
+    0%, 100% { transform: scale(1) translate(0, 0); }
+    33%       { transform: scale(1.06) translate(18px, -14px); }
+    66%       { transform: scale(0.96) translate(-12px, 12px); }
+  }
+  @keyframes gridFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes shimmer {
+    from { background-position: -200% center; }
+    to   { background-position:  200% center; }
+  }
+
+  /* ─────────────────────── SCROLL REVEAL ───────────────────────── */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s var(--transition),
+                transform 0.7s var(--transition);
+  }
+  [data-reveal="left"]  { transform: translateX(-32px); }
+  [data-reveal="right"] { transform: translateX(32px); }
+  [data-reveal].in {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  /* ─────────────────────────── NAV ─────────────────────────────── */
+  nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 500;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6vw;
+    background: rgba(4, 4, 15, 0.75);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-size: 0.97rem;
+    font-weight: 800;
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: shimmer 4s linear infinite;
+  }
+  .nav-links { display: flex; gap: 26px; list-style: none; }
+  .nav-links a {
+    font-size: 0.87rem;
+    font-weight: 500;
+    color: var(--text-2);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+    padding-bottom: 2px;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 0; height: 1px;
+    background: var(--grad);
+    transition: width 0.25s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ─────────────────────────── BUTTONS ──────────────────────────── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 8px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.87rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    white-space: nowrap;
+    transition: transform var(--transition), box-shadow var(--transition), opacity 0.2s;
+  }
+  .btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  .btn-primary {
+    background: var(--grad-purple);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(168,85,247,0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 32px rgba(168,85,247,0.55), 0 0 64px rgba(109,40,217,0.25);
+  }
+
+  .btn-wa {
+    background: var(--grad-green);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(34,197,94,0.25);
+  }
+  .btn-wa:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 32px rgba(34,197,94,0.5), 0 0 64px rgba(5,150,105,0.2);
+  }
+
+  .btn-ghost {
+    background: rgba(255,255,255,0.04);
+    color: var(--text-2);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover {
+    color: var(--text);
+    border-color: rgba(168,85,247,0.4);
+    box-shadow: 0 0 18px rgba(168,85,247,0.15);
+    transform: translateY(-2px);
+  }
+
+  /* ─────────────────────────── HERO ─────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 6vw 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* animated gradient blobs */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+  }
+  .blob-1 {
+    width: 520px; height: 520px;
+    background: rgba(168, 85, 247, 0.12);
+    top: -120px; left: -80px;
+    animation: blobPulse 9s ease-in-out infinite;
+  }
+  .blob-2 {
+    width: 420px; height: 420px;
+    background: rgba(59, 130, 246, 0.1);
+    bottom: -80px; right: -60px;
+    animation: blobPulse 11s ease-in-out infinite reverse;
+    animation-delay: -4s;
+  }
+  .blob-3 {
+    width: 300px; height: 300px;
+    background: rgba(34, 211, 238, 0.07);
+    top: 40%; left: 50%;
+    animation: blobPulse 7s ease-in-out infinite;
+    animation-delay: -2s;
+  }
+
+  /* subtle dot grid */
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 75%);
+    animation: gridFade 1.5s ease both;
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 700px; }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 22px;
+    animation: heroFadeUp 0.8s ease both;
+  }
+  .hero-eyebrow-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--purple);
+    box-shadow: 0 0 8px var(--purple);
+  }
+
+  .hero-name {
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 16px;
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: heroFadeUp 0.8s ease both 0.1s, shimmer 5s linear infinite 1s;
+  }
+
+  .hero-role {
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    font-weight: 400;
+    color: var(--text-2);
+    margin-bottom: 26px;
+    animation: heroFadeUp 0.8s ease both 0.22s;
+  }
+
+  .hero-desc {
+    font-size: 0.95rem;
+    color: var(--text-2);
+    max-width: 480px;
+    margin: 0 auto 36px;
+    line-height: 1.8;
+    animation: heroFadeUp 0.8s ease both 0.36s;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: heroFadeUp 0.8s ease both 0.5s;
+  }
+
+  .hero-metrics {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    animation: heroFadeIn 1s ease both 0.9s;
+  }
+  .metric {
+    padding: 0 28px;
+    text-align: center;
+    position: relative;
+  }
+  .metric + .metric::before {
+    content: '';
+    position: absolute;
+    right: 0; top: 10%; bottom: 10%;
+    width: 1px;
+    background: var(--border);
+  }
+  .metric-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .metric-label { font-size: 0.75rem; color: var(--text-3); }
+
+  /* ─────────────────────────── SECTIONS ─────────────────────────── */
+  section { padding: 88px 6vw; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 12px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 18px; height: 1px;
+    background: var(--purple);
+    box-shadow: 0 0 6px var(--purple);
+  }
+
+  .section-title {
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    margin-bottom: 52px;
+  }
+  .section-title .accent {
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ─────────────────────────── ABOUT ────────────────────────────── */
+  #about { background: var(--bg2); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    align-items: start;
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .about-text p { color: var(--text-2); font-size: 0.95rem; margin-bottom: 14px; line-height: 1.8; }
+  .about-text p strong { color: var(--text); font-weight: 600; }
+
+  .about-contacts { list-style: none; margin-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+  .about-contacts li { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; color: var(--text-2); }
+  .ci {
+    width: 30px; height: 30px;
+    background: rgba(168,85,247,0.08);
+    border: 1px solid rgba(168,85,247,0.2);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+  .about-contacts a { color: var(--purple); text-decoration: none; transition: color 0.2s; }
+  .about-contacts a:hover { color: var(--cyan); }
+
+  .skill-panel {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; left: 0; height: 1px;
+    background: var(--grad);
+    opacity: 0.5;
+  }
+  .skill-panel-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-3);
+    margin-bottom: 22px;
+  }
+  .skill-bars { display: flex; flex-direction: column; gap: 18px; }
+  .sb-head { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; margin-bottom: 7px; }
+  .sb-head span:last-child { color: var(--text-3); font-weight: 400; font-size: 0.75rem; }
+  .sb-track {
+    height: 3px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 3px;
+    overflow: visible;
+    position: relative;
+  }
+  .sb-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--grad);
+    box-shadow: 0 0 8px rgba(168,85,247,0.6);
+    animation: barIn 1.4s cubic-bezier(.22,1,.36,1) both;
+    position: relative;
+  }
+  .sb-fill::after {
+    content: '';
+    position: absolute;
+    left: -2px; /* RTL: "end" of fill bar */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan), 0 0 4px #fff;
+  }
+  @keyframes barIn { from { width: 0 !important; } }
+
+  /* ─────────────────────────── SKILLS ───────────────────────────── */
+  #skills { background: var(--bg); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .sk-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 20px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  .sk-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--grad);
+    opacity: 0;
+    transition: opacity var(--transition);
+    border-radius: var(--r);
+  }
+  .sk-card:hover {
+    border-color: rgba(168,85,247,0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(168,85,247,0.12);
+  }
+  .sk-card:hover::before { opacity: 0.04; }
+  .sk-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: rgba(168,85,247,0.1);
+    border: 1px solid rgba(168,85,247,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+    position: relative; z-index: 1;
+  }
+  .sk-name { font-size: 0.9rem; font-weight: 700; position: relative; z-index: 1; }
+  .sk-desc { font-size: 0.77rem; color: var(--text-2); margin-top: 3px; line-height: 1.5; position: relative; z-index: 1; }
+
+  /* ─────────────────────────── PROJECTS ─────────────────────────── */
+  #projects { background: var(--bg2); }
+
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  /* gradient border using background-clip trick */
+  .pcard {
+    border-radius: var(--r);
+    padding: 1px;
+    background: linear-gradient(var(--bg3), var(--bg3)) padding-box,
+                linear-gradient(135deg, var(--c1, #a855f7), var(--c2, #3b82f6)) border-box;
+    border: 1px solid transparent;
+    transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+  }
+  .pcard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px var(--glow, rgba(168,85,247,0.18));
+  }
+
+  .pcard-inner {
+    background: var(--bg3);
+    border-radius: calc(var(--r) - 1px);
+    padding: 22px 26px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* subtle top shimmer line */
+  .pcard-inner::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; left: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--c1, #a855f7), var(--c2, #3b82f6), transparent);
+    opacity: 0.6;
+  }
+
+  .pcard-header {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 14px;
+  }
+  .pcard-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    background: rgba(168,85,247,0.08);
+    border: 1px solid rgba(168,85,247,0.18);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .pcard-title { font-size: 0.98rem; font-weight: 800; letter-spacing: -0.01em; }
+  .pcard-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-3);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-top: 3px;
+  }
+
+  .pcard-challenge {
+    font-size: 0.82rem;
+    color: var(--text-2);
+    line-height: 1.65;
+    padding: 10px 13px;
+    background: rgba(245,158,11,0.04);
+    border-right: 2px solid rgba(245,158,11,0.35);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 16px;
+  }
+  .pcard-challenge strong { color: #d4954a; font-weight: 600; }
+
+  .pcard-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 16px;
+  }
+  .pcol-title {
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 9px;
+  }
+
+  .pcard-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .pcard-list li {
+    display: flex; align-items: flex-start; gap: 7px;
+    font-size: 0.81rem; color: var(--text-2); line-height: 1.5;
+  }
+  .pcard-list li::before {
+    content: '›';
+    color: var(--text-3);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .results-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .results-list li {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 0.81rem; color: var(--text);
+  }
+  .rcheck {
+    width: 15px; height: 15px;
+    border-radius: 50%;
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.55rem; color: #4ade80;
+    flex-shrink: 0;
+  }
+
+  .pcard-footer {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .pf-label {
+    font-size: 0.65rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-3);
+  }
+  .tool-tag {
+    font-size: 0.7rem; font-weight: 500;
+    color: var(--text-2);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 9px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .tool-tag:hover { border-color: rgba(168,85,247,0.35); color: var(--text); }
+
+  /* ─────────────────────────── CONTACT ──────────────────────────── */
+  #contact { background: var(--bg); text-align: center; }
+  .contact-inner { max-width: 620px; margin: 0 auto; }
+  .contact-desc { color: var(--text-2); font-size: 0.95rem; margin-bottom: 40px; line-height: 1.8; }
+
+  .contact-row {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+  .ccard {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--bg2);
+    border-radius: var(--r);
+    padding: 14px 18px;
+    text-decoration: none;
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    min-width: 180px;
+    /* gradient border */
+    border: 1px solid transparent;
+    background: linear-gradient(var(--bg2), var(--bg2)) padding-box,
+                linear-gradient(135deg, rgba(168,85,247,0.25), rgba(59,130,246,0.2)) border-box;
+  }
+  .ccard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(168,85,247,0.15);
+    background: linear-gradient(var(--bg3), var(--bg3)) padding-box,
+                linear-gradient(135deg, rgba(168,85,247,0.6), rgba(59,130,246,0.5)) border-box;
+  }
+  .ccard.wa {
+    background: linear-gradient(var(--bg2), var(--bg2)) padding-box,
+                linear-gradient(135deg, rgba(34,197,94,0.3), rgba(5,150,105,0.2)) border-box;
+  }
+  .ccard.wa:hover {
+    box-shadow: 0 8px 28px rgba(34,197,94,0.15);
+    background: linear-gradient(var(--bg3), var(--bg3)) padding-box,
+                linear-gradient(135deg, rgba(34,197,94,0.6), rgba(5,150,105,0.4)) border-box;
+  }
+  .ccard-icon { font-size: 1.15rem; flex-shrink: 0; }
+  .ccard-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); }
+  .ccard-value { font-size: 0.86rem; font-weight: 600; color: var(--text); margin-top: 1px; }
+
+  .contact-cta { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  /* ─────────────────────────── FOOTER ───────────────────────────── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 24px 6vw;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-3);
+  }
+
+  /* ─────────────────────────── FLOATING WA ──────────────────────── */
+  .wa-float {
+    position: fixed;
+    bottom: 24px; left: 24px;
+    z-index: 400;
+    display: flex; align-items: center; gap: 9px;
+    height: 42px;
+    padding: 0 17px;
+    border-radius: 21px;
+    background: #1da855;
+    color: #fff;
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.83rem;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(34,197,94,0.3);
+    transition: transform var(--transition), box-shadow var(--transition);
+    direction: rtl;
+  }
+  .wa-float:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(34,197,94,0.45);
+  }
+  .wa-float svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ─────────────────────────── RESPONSIVE ───────────────────────── */
+  @media (max-width: 860px) {
+    .about-grid { grid-template-columns: 1fr; gap: 44px; }
+    .pcard-cols  { grid-template-columns: 1fr; gap: 14px; }
+    .pcard-inner { padding: 18px 20px; }
+  }
+  @media (max-width: 600px) {
+    .nav-links  { display: none; }
+    .hero-metrics { flex-direction: column; gap: 14px; }
+    .metric + .metric::before { display: none; }
+    .wa-float span { display: none; }
+    .wa-float { padding: 0; width: 42px; border-radius: 50%; }
+    .contact-row { flex-direction: column; align-items: stretch; }
+    .ccard { min-width: 0; }
+  }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════ NAV ══════════════════════ -->
+<nav>
+  <span class="nav-logo">יהודית כהן</span>
+  <ul class="nav-links">
+    <li><a href="#about">אודות</a></li>
+    <li><a href="#skills">התמחויות</a></li>
+    <li><a href="#projects">פרויקטים</a></li>
+    <li><a href="#contact">צור קשר</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      מומחית אוטומציה עסקית
+      <span class="hero-eyebrow-dot"></span>
+    </div>
+
+    <h1 class="hero-name">יהודית כהן</h1>
+
+    <p class="hero-role">אוטומציה · בינה מלאכותית · CRM · No-Code</p>
+
+    <p class="hero-desc">
+      בונה מערכות אוטומציה שחוסכות שעות של עבודה ידנית — משלבת AI עם אוטומציות מתקדמות ומשדרגת תהליכים עסקיים מקצה לקצה.
+    </p>
+
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">הצג פרויקטים</a>
+      <a href="https://wa.me/972552422617" target="_blank" class="btn btn-wa">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.532 5.857L.057 23.882l6.156-1.463A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 01-5.031-1.389l-.36-.214-3.733.888.937-3.623-.235-.372A9.795 9.795 0 012.182 12c0-5.418 4.4-9.818 9.818-9.818 5.419 0 9.818 4.4 9.818 9.818 0 5.419-4.399 9.818-9.818 9.818z"/></svg>
+        WhatsApp
+      </a>
+      <a href="#contact" class="btn btn-ghost">צור קשר</a>
+    </div>
+
+    <div class="hero-metrics">
+      <div class="metric">
+        <div class="metric-value">חיסכון זמן</div>
+        <div class="metric-label">בכל תהליך אוטומטי</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">זמינות מיידית</div>
+        <div class="metric-label">מענה אוטומטי תמידי</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">100% No-Code</div>
+        <div class="metric-label">ללא תלות בפיתוח</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">פתרון מותאם</div>
+        <div class="metric-label">לכל עסק ותהליך</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ ABOUT ══════════════════════ -->
+<section id="about">
+  <div class="about-grid" style="max-width:1040px;margin:0 auto;">
+    <div class="about-text">
+      <span class="eyebrow" data-reveal>אודות</span>
+      <h2 class="section-title" data-reveal data-delay="0.1">
+        מי <span class="accent">אני?</span>
+      </h2>
+      <p data-reveal data-delay="0.15">
+        אני <strong>יהודית כהן</strong>, מומחית אוטומציה עסקית עם ניסיון בבניית מערכות חכמות שמשחררות עסקים מעבודה ידנית ומאפשרות להתרכז במה שחשוב.
+      </p>
+      <p data-reveal data-delay="0.2">
+        אני מתמחה ב-<strong>No-Code ו-Low-Code</strong>, מערכות <strong>CRM</strong>, בוטים מבוססי AI וניהול מידע — עם רקע בסיסי בקוד שמאפשר לי לגשר בין העולמות.
+      </p>
+      <p data-reveal data-delay="0.25">
+        כל פרויקט מתחיל מהבנה עמוקה של האתגר העסקי ומסתיים בפתרון שפועל בשקט, ללא תשומת לב ידנית.
+      </p>
+      <ul class="about-contacts" data-reveal data-delay="0.3">
+        <li><span class="ci">✉</span><a href="mailto:autosmagic20@gmail.com">autosmagic20@gmail.com</a></li>
+        <li><span class="ci">☎</span><a href="tel:0552422617">055-242-2617</a></li>
+        <li><span class="ci">⌖</span><span>מודיעין עילית</span></li>
+      </ul>
+    </div>
+
+    <div data-reveal="right" data-delay="0.1">
+      <div class="skill-panel">
+        <div class="skill-panel-title">רמת מיומנות לפי תחום</div>
+        <div class="skill-bars">
+          <div>
+            <div class="sb-head"><span>אוטומציה עסקית</span><span>95%</span></div>
+            <div class="sb-track"><div class="sb-fill" style="width:95%"></div></div>
+          </div>
+          <div>
+            <div class="sb-head"><span>No-Code / Low-Code</span><span>92%</span></div>
+            <div class="sb-track"><div class="sb-fill" style="width:92%"></div></div>
+          </div>
+          <div>
+            <div class="sb-head"><span>מערכות CRM</span><span>90%</span></div>
+            <div class="sb-track"><div class="sb-fill" style="width:90%"></div></div>
+          </div>
+          <div>
+            <div class="sb-head"><span>בינה מלאכותית ובוטים</span><span>88%</span></div>
+            <div class="sb-track"><div class="sb-fill" style="width:88%"></div></div>
+          </div>
+          <div>
+            <div class="sb-head"><span>ניהול מידע ודוחות</span><span>85%</span></div>
+            <div class="sb-track"><div class="sb-fill" style="width:85%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ SKILLS ══════════════════════ -->
+<section id="skills">
+  <div style="max-width:1040px;margin:0 auto;">
+    <span class="eyebrow" data-reveal>תחומי התמחות</span>
+    <h2 class="section-title" data-reveal data-delay="0.1">מה אני <span class="accent">מביאה לשולחן?</span></h2>
+    <div class="skills-grid">
+      <div class="sk-card" data-reveal data-delay="0.05"><div class="sk-icon">⚡</div><div><div class="sk-name">אוטומציה עסקית</div><div class="sk-desc">הפיכת תהליכים ידניים לאוטומטיים וחיסכון בשעות עבודה</div></div></div>
+      <div class="sk-card" data-reveal data-delay="0.1"><div class="sk-icon">🗂️</div><div><div class="sk-name">מערכות CRM</div><div class="sk-desc">ניהול לקוחות, לידים, פרויקטים ותשלומים ממקום אחד</div></div></div>
+      <div class="sk-card" data-reveal data-delay="0.15"><div class="sk-icon">🤖</div><div><div class="sk-name">בינה מלאכותית ובוטים</div><div class="sk-desc">שילוב OpenAI ובוטים לאוטומציה חכמה ומענה אוטומטי</div></div></div>
+      <div class="sk-card" data-reveal data-delay="0.2"><div class="sk-icon">🔧</div><div><div class="sk-name">No-Code ו-Low-Code</div><div class="sk-desc">Make, Airtable, Origami ועוד — תוצאות מקסימליות</div></div></div>
+      <div class="sk-card" data-reveal data-delay="0.25"><div class="sk-icon">🎯</div><div><div class="sk-name">ניהול לידים</div><div class="sk-desc">מעקב, סיווג ואוטומציה של תהליך סגירת לקוחות</div></div></div>
+      <div class="sk-card" data-reveal data-delay="0.3"><div class="sk-icon">📊</div><div><div class="sk-name">ניהול מידע</div><div class="sk-desc">מסדי נתונים, דוחות אוטומטיים וארכיון קל לחיפוש</div></div></div>
+      <div class="sk-card" data-reveal data-delay="0.35"><div class="sk-icon">💻</div><div><div class="sk-name">פיתוח בסיסי</div><div class="sk-desc">רקע בקוד המאפשר גמישות וגישור בין פתרונות שונים</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ PROJECTS ══════════════════════ -->
+<section id="projects">
+  <div style="max-width:920px;margin:0 auto;">
+    <span class="eyebrow" data-reveal>פרויקטים נבחרים</span>
+    <h2 class="section-title" data-reveal data-delay="0.1">עבודות שדיברו <span class="accent">בעד עצמן</span></h2>
+
+    <div class="projects-list">
+
+      <div class="pcard" style="--c1:#a855f7;--c2:#6366f1;--glow:rgba(168,85,247,0.2)" data-reveal data-delay="0.05">
+        <div class="pcard-inner">
+          <div class="pcard-header">
+            <div class="pcard-icon">📧</div>
+            <div>
+              <div class="pcard-title">אוטומציה למענה למיילים</div>
+              <span class="pcard-tag">עסק UX/UI</span>
+            </div>
+          </div>
+          <div class="pcard-challenge">
+            <strong>האתגר — </strong>בעלת העסק השקיעה שעות רבות ביום בכתיבת תגובות ידניות למיילים נכנסים.
+          </div>
+          <div class="pcard-cols">
+            <div>
+              <div class="pcol-title">הפתרון</div>
+              <ul class="pcard-list">
+                <li>ניתוח מייל והפקת תשובה אוטומטית עם Make + OpenAI</li>
+                <li>תיעוד ומעקב מלא ב-Airtable</li>
+                <li>בוט AI למענה מיידי לשאלות נפוצות</li>
+                <li>ניהול קבוצות דיוור ומניעת כפילויות</li>
+              </ul>
+            </div>
+            <div>
+              <div class="pcol-title">תוצאה</div>
+              <ul class="results-list">
+                <li><span class="rcheck">✓</span>חיסכון שעות עבודה יומיות</li>
+                <li><span class="rcheck">✓</span>מענה אוטומטי מיידי</li>
+                <li><span class="rcheck">✓</span>פחות טעויות אנוש</li>
+                <li><span class="rcheck">✓</span>פינוי זמן לעבודה בעלת ערך</li>
+              </ul>
+            </div>
+          </div>
+          <div class="pcard-footer">
+            <span class="pf-label">כלים</span>
+            <span class="tool-tag">Make</span><span class="tool-tag">OpenAI</span><span class="tool-tag">Airtable</span><span class="tool-tag">WordPress</span><span class="tool-tag">Google Workspace</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pcard" style="--c1:#f59e0b;--c2:#f97316;--glow:rgba(245,158,11,0.15)" data-reveal data-delay="0.08">
+        <div class="pcard-inner">
+          <div class="pcard-header">
+            <div class="pcard-icon" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2)">🗂️</div>
+            <div>
+              <div class="pcard-title">מערכת CRM אוטומטית</div>
+              <span class="pcard-tag">סוכנות אוטומציה</span>
+            </div>
+          </div>
+          <div class="pcard-challenge">
+            <strong>האתגר — </strong>ניהול מורכב של פרויקטים, לידים, פגישות וזמנים ללא מערכת מרכזית אחת.
+          </div>
+          <div class="pcard-cols">
+            <div>
+              <div class="pcol-title">הפתרון</div>
+              <ul class="pcard-list">
+                <li>CRM מלא ב-Origami: לקוחות, לידים, פרויקטים</li>
+                <li>אוטומציות Make ותזכורות לפגישות</li>
+                <li>ניהול בנק שעות ומעקב תשלומים</li>
+                <li>חתימות דיגיטליות למסמכים משפטיים</li>
+              </ul>
+            </div>
+            <div>
+              <div class="pcol-title">תוצאה</div>
+              <ul class="results-list">
+                <li><span class="rcheck">✓</span>ניהול מרכזי וברור</li>
+                <li><span class="rcheck">✓</span>תזכורות שמפחיתות החמצות</li>
+                <li><span class="rcheck">✓</span>סגירת לידים מהירה יותר</li>
+                <li><span class="rcheck">✓</span>מעקב מסודר אחרי תשלומים</li>
+              </ul>
+            </div>
+          </div>
+          <div class="pcard-footer">
+            <span class="pf-label">כלים</span>
+            <span class="tool-tag">Origami</span><span class="tool-tag">Make</span><span class="tool-tag">Google Workspace</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pcard" style="--c1:#10b981;--c2:#22d3ee;--glow:rgba(16,185,129,0.15)" data-reveal data-delay="0.11">
+        <div class="pcard-inner">
+          <div class="pcard-header">
+            <div class="pcard-icon" style="background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.2)">📄</div>
+            <div>
+              <div class="pcard-title">מערכת ניהול חשבוניות אוטומטית</div>
+              <span class="pcard-tag">עיבוד מאות חשבוניות בחודש</span>
+            </div>
+          </div>
+          <div class="pcard-challenge">
+            <strong>האתגר — </strong>עיבוד ידני של מאות חשבוניות בחודש: סריקה, סיווג, שמירה וניהול.
+          </div>
+          <div class="pcard-cols">
+            <div>
+              <div class="pcol-title">הפתרון</div>
+              <ul class="pcard-list">
+                <li>סינון אוטומטי מהמייל עם Gmail + Make</li>
+                <li>חילוץ נתונים עם OCR ו-AI</li>
+                <li>מסד נתונים ב-Airtable לכל הגורמים</li>
+                <li>שמירה אוטומטית לפי חודש ב-Google Drive</li>
+              </ul>
+            </div>
+            <div>
+              <div class="pcol-title">תוצאה</div>
+              <ul class="results-list">
+                <li><span class="rcheck">✓</span>חיסכון משמעותי בזמן</li>
+                <li><span class="rcheck">✓</span>דיוק גבוה בסיווג</li>
+                <li><span class="rcheck">✓</span>דוחות מתעדכנים אוטומטית</li>
+                <li><span class="rcheck">✓</span>ארכיון מסודר וקל לחיפוש</li>
+              </ul>
+            </div>
+          </div>
+          <div class="pcard-footer">
+            <span class="pf-label">כלים</span>
+            <span class="tool-tag">Make</span><span class="tool-tag">Airtable</span><span class="tool-tag">Google Drive</span><span class="tool-tag">OCR</span><span class="tool-tag">AI</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pcard" style="--c1:#ec4899;--c2:#a855f7;--glow:rgba(236,72,153,0.15)" data-reveal data-delay="0.14">
+        <div class="pcard-inner">
+          <div class="pcard-header">
+            <div class="pcard-icon" style="background:rgba(236,72,153,0.08);border-color:rgba(236,72,153,0.2)">💅</div>
+            <div>
+              <div class="pcard-title">מערכת ניהול לקוחות ותורים</div>
+              <span class="pcard-tag">עסק קוסמטיקה — Airtable</span>
+            </div>
+          </div>
+          <div class="pcard-challenge">
+            <strong>האתגר — </strong>עבודה ידנית ללא מערכת: בלבול בתורים, תשלומים שמתעכבים ונתונים אובדים.
+          </div>
+          <div class="pcard-cols">
+            <div>
+              <div class="pcol-title">הפתרון</div>
+              <ul class="pcard-list">
+                <li>Airtable מלא: לקוחות, תורים, טיפולים, תשלומים</li>
+                <li>מניעת כפילויות ומעקב סטטוסים</li>
+                <li>קישוריות חכמה ונוסחאות חישוב</li>
+                <li>דוח בזמן אמת לתמונת מצב מיידית</li>
+              </ul>
+            </div>
+            <div>
+              <div class="pcol-title">תוצאה</div>
+              <ul class="results-list">
+                <li><span class="rcheck">✓</span>מעבר ממערכת ידנית למסודרת</li>
+                <li><span class="rcheck">✓</span>פחות בלבול בניהול תורים</li>
+                <li><span class="rcheck">✓</span>גבייה מהירה ומסודרת</li>
+                <li><span class="rcheck">✓</span>שליטה מלאה בנתונים</li>
+              </ul>
+            </div>
+          </div>
+          <div class="pcard-footer">
+            <span class="pf-label">כלים</span>
+            <span class="tool-tag">Airtable</span><span class="tool-tag">Google Workspace</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CONTACT ══════════════════════ -->
+<section id="contact">
+  <div class="contact-inner">
+    <span class="eyebrow" data-reveal>צור קשר</span>
+    <h2 class="section-title" data-reveal data-delay="0.1">בואו <span class="accent">נעבוד יחד</span></h2>
+    <p class="contact-desc" data-reveal data-delay="0.15">
+      מחפשים לייעל תהליכים ולהפוך עבודה ידנית לאוטומטית?<br />
+      אשמח לשמוע על הצרכים שלכם ולבנות פתרון מותאם אישית.
+    </p>
+
+    <div class="contact-row" data-reveal data-delay="0.2">
+      <a href="https://wa.me/972552422617" target="_blank" class="ccard wa">
+        <div class="ccard-icon">💬</div>
+        <div><div class="ccard-label">WhatsApp</div><div class="ccard-value">055-242-2617</div></div>
+      </a>
+      <a href="mailto:autosmagic20@gmail.com" class="ccard">
+        <div class="ccard-icon">✉️</div>
+        <div><div class="ccard-label">מייל</div><div class="ccard-value">autosmagic20@gmail.com</div></div>
+      </a>
+      <a href="tel:0552422617" class="ccard">
+        <div class="ccard-icon">📱</div>
+        <div><div class="ccard-label">טלפון</div><div class="ccard-value">055-242-2617</div></div>
+      </a>
+    </div>
+
+    <div class="contact-cta" data-reveal data-delay="0.25">
+      <a href="https://wa.me/972552422617" target="_blank" class="btn btn-wa">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.532 5.857L.057 23.882l6.156-1.463A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 01-5.031-1.389l-.36-.214-3.733.888.937-3.623-.235-.372A9.795 9.795 0 012.182 12c0-5.418 4.4-9.818 9.818-9.818 5.419 0 9.818 4.4 9.818 9.818 0 5.419-4.399 9.818-9.818 9.818z"/></svg>
+        שלח הודעה ב-WhatsApp
+      </a>
+      <a href="mailto:autosmagic20@gmail.com" class="btn btn-primary">שלח מייל</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+<footer>
+  <p>© 2025 יהודית כהן — מומחית אוטומציה עסקית</p>
+</footer>
+
+<!-- ══════════════════════ FLOATING WA ══════════════════ -->
+<a href="https://wa.me/972552422617" target="_blank" class="wa-float" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.532 5.857L.057 23.882l6.156-1.463A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 01-5.031-1.389l-.36-.214-3.733.888.937-3.623-.235-.372A9.795 9.795 0 012.182 12c0-5.418 4.4-9.818 9.818-9.818 5.419 0 9.818 4.4 9.818 9.818 0 5.419-4.399 9.818-9.818 9.818z"/></svg>
+  <span>055-242-2617</span>
+</a>
+
+<!-- ══════════════════════ SCROLL REVEAL JS ══════════════ -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const delay = el.dataset.delay ? parseFloat(el.dataset.delay) * 1000 : 0;
+      setTimeout(() => el.classList.add('in'), delay);
+      observer.unobserve(el);
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
